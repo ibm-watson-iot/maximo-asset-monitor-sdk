@@ -8,6 +8,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+### Local Testing ###
+local_test_script.py
+local_test_data.json
+
 # C extensions
 *.so
 
