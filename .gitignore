@@ -12,6 +12,9 @@ __pycache__/
 local_test_script.py
 local_test_data.json
 
+### Passwords file ###
+credentials.json
+
 # C extensions
 *.so
 
