@@ -14,6 +14,7 @@ local_test_data.json
 
 ### Passwords file ###
 credentials.json
+environment.json
 
 # C extensions
 *.so
