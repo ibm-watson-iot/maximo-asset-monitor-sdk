@@ -67,16 +67,19 @@ class APIClient(object):
         if "version" not in format_dict:
             format_dict["version"] = 'v1'
 
-        url = "{base_url}/api/{api_suffix}/{version}".format(**format_dict)
+        url = "https://{base_url}/api/{api_suffix}/{version}".format(**format_dict)
         url = (url + self.endpoint_suffix).format(**self.path_arguments)
         print("url = " + url)
 
+        cert_verify = True
         if "disableCertificateVerification" in self.environment_info:
             cert_verify = self.environment_info["disableCertificateVerification"]
-        else:
-            cert_verify = True
 
-        if self.environment_info["isBasicAuth"]:  # Use basic authentication
+        basic_auth = False
+        if "isBasicAuth" in self.environment_info:
+            basic_auth = True
+
+        if basic_auth:  # Use basic authentication
             auth = (self.environment_info["API_USERNAME"], self.environment_info["API_PASSWORD"])
             response = requests.request(self.http_method_name, url, auth=auth, headers=self.headers,
                                         params=self.query_arguments, data=self.body, files=self.files,

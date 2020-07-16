@@ -139,3 +139,67 @@ create_custom_schema = {
     },
     "required": ["entity_type_name"]
 }
+
+def generate_api_environment(credentials):
+    """
+    make desired environment from credentials
+    sample environment:
+    {
+      "tenant_id": "AnalyticsServiceDev",
+      "_comment_tenant_id": "REQUIRED. same as the one credentials.json",
+
+      "base_url": "https://api-dev.connectedproducts.internetofthings.ibmcloud.com",
+      "_comment_base_url": "REQUIRED",
+
+      "version": "v1",
+      "_comment_version": "OPTIONAL. default value is v1",
+
+      "isBasicAuth": false,
+      "_comment_isBasicAuth_1/3": "REQUIRED. default value is false. ",
+      "_comment_isBasicAuth_2/3": "when true requires: API_USERNAME and API_PASSWORD when True. ",
+      "_comment_isBasicAuth_3/3": "when false requires: authentication_header={'x-api-key', 'x-api-token'}",
+
+      "authentication_header": {
+        "X-api-key": "valid-api-key-goes-here",
+        "X-api-token": "valid-api-token-goes-here"
+      },
+      "_comment_authentication_header": "REQUIRED",
+
+      "disableCertificateVerification": true,
+      "_comment_disableCertificateVerification_1/1": "OPTIONAL. default value is true"
+    }
+    '''
+    :param credentials:
+    :return: environment
+    """
+    environment = {'authentication_header': {}}
+
+    if credentials['tenantId'] is None:
+        raise RuntimeError(('No tenant id supplied in credentials'
+                            ' Please supply a valid tenant id.'))
+    else:
+        environment['tenant_id'] = credentials['tenantId']
+
+    if credentials['iotp'] is None:
+        raise RuntimeError(('No iotp information supplied in credentials'
+                            ' Please supply valid authentication/url information in `iotp` key'))
+    else:
+        if credentials['iotp']['apiKey'] is None:
+            raise RuntimeError(('No api-key supplied in credentials'
+                                ' Please supply valid api-key'))
+        else:
+            environment['authentication_header']['X-api-key'] = credentials['iotp']['apiKey']
+
+        if credentials['iotp']['apiToken'] is None:
+            raise RuntimeError(('No api-token supplied in credentials'
+                                ' Please supply valid api-token'))
+        else:
+            environment['authentication_header']['X-api-token'] = credentials['iotp']['apiToken']
+
+        if credentials['iotp']['asHost'] is None:
+            raise RuntimeError(('No host url supplied in credentials'
+                                ' Please supply valid host url'))
+        else:
+            environment['base_url'] = credentials['iotp']['asHost']
+
+    return environment

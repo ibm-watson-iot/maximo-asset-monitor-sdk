@@ -22,7 +22,7 @@ def _parse_input_columns(columns):
     """
     generate sqlalchemy Column from user defined columns
 
-    :param metrics list of dicts . example:
+    :param columns: list of dicts . example:
     ```
     [{
         'name': 'sample_column_name',
@@ -49,7 +49,7 @@ def _parse_input_constants(constants):
     generate sqlalchemy Column from user defined columns (for UISingle constants only)
     TODO: add support for UIMulti. Currently, it's not documented how to
 
-    :param contants: list of dicts; example:
+    :param constants: list of dicts; example:
     ```
     [{
         'name': 'sample_constant_name',
@@ -78,7 +78,7 @@ def _parse_input_constants(constants):
     return ret_constants
 
 
-def _parse_input_functions(functions, environment=None):
+def _parse_input_functions(functions, credentials=None):
     """
     generate function object from function names
 
@@ -96,12 +96,12 @@ def _parse_input_functions(functions, environment=None):
         }
     }]
     ```
-    :param environment json
+    :param credentials: dicts analytics-service devcredentials
     :return: a list of functions objects/modules
     """
     ret_functions = []
 
-    valid_functions = _get_catalog_functions()
+    valid_functions = _get_catalog_functions(credentials=credentials)
     name_to_module = {}
     for item in valid_functions:
         name_to_module[item['name']] = item['moduleAndTargetName']
@@ -128,35 +128,20 @@ def _parse_input_functions(functions, environment=None):
     return ret_functions
 
 
-def _get_catalog_functions(environment=None):
+def _get_catalog_functions(credentials=None):
     """
     find and returns a list of all catalog functions
 
     Uses the following APIs:
     PUT    /meta/v1/{orgId}/entityType/{entityTypeName}/archive
 
-    :param environment json
+    :param credentials: dict analytics-service dev credentials
     :return: list of dicts containing all catalog functions
     """
 
-    # 1. LOADING EXISTING API CREDENTIALS
-    '''
-        # Getting and Saving API credentials
-        # Explore > Usage > Watson IOT Platform Services > Copy to api key
-        # Paste contents in environment.json file
-        # Explore > Usage > Watson IOT Platform Services > Copy to api token
-        ## Paste contents in environment.json file
-        # Save file in maximo-asset-monitor-sdk/dev_resources folder
-    '''
-    logger.debug('Reading API Credentials')
-    # TODO: pass as function argument environment
-    environment_path = './dev_resources/environment.json'
-    with open(environment_path, 'r') as F:
-        environment = json.load(F)
-
-    # 2. API CONNECTION: GET ALL CATALOG FUNCTIONS
+    # API CONNECTION: GET ALL CATALOG FUNCTIONS
     logger.debug('Connecting to API')
-    APIClient.environment_info = environment
+    APIClient.environment_info = generate_api_environment(credentials)
     response = APIClient(api_suffix="catalog",
                          http_method_name="GET",
                          endpoint_suffix="/{orgId}/function",
@@ -165,13 +150,13 @@ def _get_catalog_functions(environment=None):
     return response.json()
 
 
-def create_custom(json_payload, environment=None, credentials=None, **kwargs):
+def create_custom(json_payload, credentials=None, **kwargs):
     """
     creates an entity type using the given json payload
     Uses the following APIs:
     POST /meta/v1/{orgId}/entityType
 
-    :param json_payload JSON describes metadata required for creating desired entity type
+    :param json_payload: JSON describes metadata required for creating desired entity type
     expected json schema is as follows:
     ```
         example_schema = {
@@ -218,8 +203,7 @@ def create_custom(json_payload, environment=None, credentials=None, **kwargs):
         }
     }]
     ```
-    :param credentials database credentials
-    :param environment api connection variables
+    :param credentials: dict analytics-service dev credentials
     :param **kwargs {
         drop_existing bool delete existing table and rebuild the entity type table in Db
         db_schema str if no schema is provided will use the default schema
@@ -249,7 +233,7 @@ def create_custom(json_payload, environment=None, credentials=None, **kwargs):
         dimensions = _parse_input_columns(dimensions)
     if 'functions' in payload:
         functions = payload['functions']
-        functions = _parse_input_functions(functions, environment=environment)
+        functions = _parse_input_functions(functions, credentials=credentials)
 
     # 3. DATABASE CONNECTION
     # :description: to access Watson IOT Platform Analytics DB.
@@ -276,38 +260,97 @@ def create_custom(json_payload, environment=None, credentials=None, **kwargs):
     return 1
 
 
-def add_metrics(json_payload, credentials=None):
+def create_metrics(json_payload, credentials=None):
     """
     add metrics to a given entity type
-    :param credentials:
+    :param credentials: dict analytics-service dev credentials
     :param json_payload:
     :return:
     """
     return 1
 
 
-def add_functions(json_payload, environment=None, credentials=None):
+def update_metrics(json_payload, credentials=None):
+    """
+
+    :param json_payload:
+    :param credentials: dict analytics-service dev credentials
+    :return:
+    """
+    return 1
+
+
+def remove_metrics(json_payload, credentials=None):
+    """
+
+    :param json_payload:
+    :param credentials: dict analytics-service dev credentials
+    :return:
+    """
+    return 1
+
+
+def create_functions(json_payload, credentials=None):
     """
     add kpi functions to a given entity type
-    :param environment:
-    :param credentials:
+    :param credentials: dict analytics-service dev credentials
     :param json_payload:
     :return:
     """
     return 1
 
 
-def add_constants(json_payload, credentials=None):
+def update_functions(json_payload,  credentials=None):
+    """
+    add kpi functions to a given entity type
+    :param credentials: dict analytics-service dev credentials
+    :param json_payload:
+    :return:
+    """
+    return 1
+
+
+def remove_functions(json_payload, credentials=None):
+    """
+
+    :param json_payload:
+    :param credentials: dict analytics-service dev credentials
+    :return:
+    """
+    return 1
+
+
+def create_constants(json_payload, credentials=None):
     """
     add constants to a given entity type
-    :param credentials:
+    :param credentials: dict analytics-service dev credentials
     :param json_payload:
     :return:
     """
     return 1
 
 
-def delete(entity_type_name, environment=None):
+def update_constants(json_payload, credentials=None):
+    """
+    add constants to a given entity type
+    :param credentials: dict analytics-service dev credentials
+    :param json_payload:
+    :return:
+    """
+    return 1
+
+
+def remove_constants(json_payload, credentials=None):
+    """
+    add constants to a given entity type
+    :param credentials: dict analytics-service dev credentials
+    :param json_payload:
+    :return:
+    """
+    return 1
+
+
+def delete(entity_type_name, credentials=None):
     """
     will first archive and then delete entity type
 
@@ -315,19 +358,18 @@ def delete(entity_type_name, environment=None):
     PUT    /meta/v1/{orgId}/entityType/{entityTypeName}/archive
     DELETE /meta/v1/{orgId}/entityType/{entityTypeName}
 
-    :param environment:
-    :param entity_type_name str name of entity type to delete
+    :param credentials: dict analytics-service dev credentials
+    :param entity_type_name: str name of entity type to delete
     :return:
     """
 
-
-    # 2. API CONNECTION: ARCHIVE DELETE ENTITY TYPE
+    # 1. API CONNECTION: ARCHIVE DELETE ENTITY TYPE
     logger.debug('Connecting to API')
     path_arguments = {
         'entityTypeName': entity_type_name
     }
-    APIClient.environment_info = environment
-    # 2.a Archive entity type (required before deleting)
+    APIClient.environment_info = generate_api_environment(credentials)
+    # 1.a Archive entity type (required before deleting)
     response = APIClient(api_suffix="meta",
                          http_method_name="PUT",
                          endpoint_suffix="/{orgId}/entityType/{entityTypeName}/archive",
@@ -335,7 +377,7 @@ def delete(entity_type_name, environment=None):
                          ).call_api()
 
     if response.status_code == 200:
-        # 2.b Delete archived entity type
+        # 1.b Delete archived entity type
         APIClient(api_suffix="meta",
                   http_method_name="DELETE",
                   endpoint_suffix="/{orgId}/entityType/{entityTypeName}",
