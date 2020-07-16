@@ -59,14 +59,22 @@ class APIClient(object):
         self.query_arguments = {key: (",".join(map(str, value)) if isinstance(value, list) else str(value)) for
                                 key, value in self.query_arguments.items() if value is not None}
 
+        #form url for connecting to APIs
         format_dict = {}
         format_dict.update(APIClient.environment_info)
         format_dict["api_suffix"] = self.api_suffix
+
+        if "version" not in format_dict:
+            format_dict["version"] = 'v1'
+
         url = "{base_url}/api/{api_suffix}/{version}".format(**format_dict)
         url = (url + self.endpoint_suffix).format(**self.path_arguments)
         print("url = " + url)
 
-        cert_verify = self.environment_info["disableCertificateVerification"]
+        if "disableCertificateVerification" in self.environment_info:
+            cert_verify = self.environment_info["disableCertificateVerification"]
+        else:
+            cert_verify = True
 
         if self.environment_info["isBasicAuth"]:  # Use basic authentication
             auth = (self.environment_info["API_USERNAME"], self.environment_info["API_PASSWORD"])
@@ -85,6 +93,6 @@ class APIClient(object):
 
         # Check the status code
         if response.status_code != 200:
-            logger.debug(f'API call failed\n {response.text}')
+            logger.warning(f'API call failed\n {response.text}')
 
         return response
