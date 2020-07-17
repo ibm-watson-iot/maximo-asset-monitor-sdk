@@ -1,5 +1,7 @@
+# python libraries
 import json
 import re
+import importlib
 import logging
 from string import punctuation, whitespace
 from sqlalchemy import Integer, String, Float, DateTime, Boolean, SmallInteger
@@ -48,6 +50,7 @@ _type_sql_dict = {
     'string': String,
     'str': String,
     'float': Float,
+    'number': Float,
     'datetime': DateTime,
     'bool': Boolean,
     'boolean': Boolean
@@ -63,12 +66,13 @@ def sqlalchemy_type(type):
             "You may add custom `sqltype` to `" + str(type) + "` assignment in `_type_sql_dict`.")
 
 
-# converting user input 'type' to sqlalchemy type
+# converting user input 'type' to python built-in type
 _type_python_dict = {
     'int': int,
     'integer': int,
     'string': str,
     'str': str,
+    'number': float,
     'float': float,
     'datetime': datetime,
     'bool': bool,
@@ -84,61 +88,6 @@ def python_type(type):
         raise NotImplementedError(
             "You may add custom `datatype` to `" + str(type) + "` assignment in `_type_python_dict`.")
 
-
-# schema expected for creating entity type
-create_custom_schema = {
-    "type": "object",
-    "properties": {
-        "entity_type_name": {"type": "string"},
-        "metrics": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "datatype": {"type": "string"},
-                },
-                "required": ["name", "datatype"]
-            }
-        },
-        "constants": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "datatype": {"type": "string"},
-                    "default": {},
-                    "description": {"type": "string"}
-                },
-                "required": ["name", "datatype"]
-            }
-        },
-        "dimensions": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "datatype": {"type": "string"},
-                },
-                "required": ["name", "datatype"]
-            }
-        },
-        "functions": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "parameters": {"type": "object"},
-                },
-                "required": ["name"]
-            }
-        },
-    },
-    "required": ["entity_type_name"]
-}
 
 def generate_api_environment(credentials):
     """
