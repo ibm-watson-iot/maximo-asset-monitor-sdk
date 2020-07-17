@@ -30,5 +30,6 @@
                 "output_item": "discharge_perc"
             }
         }
-    ]
+    ],
+    "metric_timestamp_column_name": "event_timestamp"
 }

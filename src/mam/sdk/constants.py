@@ -38,11 +38,11 @@ create_constant_schema = {
 }
 
 
-def _constant_payload(constants):
+def _ui_constant_to_payload(constants):
     """
     convert a list of UI controls to json payload
 
-    :param constants: list of UI control objects
+    :param constants: list of UI control objects/single UI control object
     :return: payload: dict
     """
     if not isinstance(constants, list):
@@ -58,6 +58,22 @@ def _constant_payload(constants):
         except KeyError:
             pass
         payload.append({'name': name, 'entityType': None, 'enabled': True, 'value': default, 'metadata': meta})
+
+    return payload
+
+
+def _constant_name_to_payload(constant_names):
+    """
+    convert a list
+    :param constant_names: str/list of constant names
+    :return: dict
+    """
+    if not isinstance(constant_names, list):
+        constant_names = [constant_names]
+    payload = []
+
+    for f in constant_names:
+        payload.append({'name': f, 'entityType': None})
 
     return payload
 
@@ -94,7 +110,7 @@ def create_constants(json_payload, credentials=None):
         constants = payload['constants']
         constants = parse_input_constants(constants)
 
-    create_arguments = json.dumps(_constant_payload(constants)).encode('utf-8')
+    create_arguments = json.dumps(_ui_constant_to_payload(constants)).encode('utf-8')
 
     # 3. API CONNECTION: GET all constants for a tenant
     logger.debug('Connecting to API')
@@ -164,7 +180,7 @@ def update_constants(json_payload, credentials=None):
         constants = payload['constants']
         constants = parse_input_constants(constants)
 
-    update_arguments = json.dumps(_constant_payload(constants)).encode('utf-8')
+    update_arguments = json.dumps(_ui_constant_to_payload(constants)).encode('utf-8')
 
     # 3. API CONNECTION: GET all constants for a tenant
     logger.debug('Connecting to API')
@@ -192,10 +208,21 @@ def remove_constants(constant_names, credentials=None):
     :param constant_names: a str with a constant name or list of constant names
     :return:
     """
-    # 1. DATABASE CONNECTION
-    # :description: to access Watson IOT Platform Analytics DB.
-    logger.debug('Connecting to Database')
-    db = Database(credentials=credentials)
-    db.unregister_constants(constant_names)
+    # 1. API CONNECTION
+    # :description: to access Watson IOT Platform Analytics.
+    logger.debug('Connecting to API')
+    body_arguments = json.dumps(_constant_name_to_payload(constant_names)).encode('utf-8')
+    APIClient.environment_info = generate_api_environment(credentials)
+    # call api to retrieve all constants for a tenant
+    response = APIClient(api_suffix="constants",
+                         http_method_name="DELETE",
+                         endpoint_suffix="/{orgId}",
+                         body=body_arguments,
+                         ).call_api()
+    try:
+        msg = 'Constants deletion status: %s' % (response.data.decode('utf-8'))
+    except AttributeError:
+        msg = 'Constants deletion status: %s' % response
+    logger.info(msg)
 
     return 1

@@ -16,6 +16,8 @@ local_test_data.json
 credentials.json
 environment.json
 
+.idea/
+
 # C extensions
 *.so
 

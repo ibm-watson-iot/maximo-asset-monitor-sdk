@@ -33,8 +33,8 @@ with open(entitytype_data_path, 'r') as f:
         rc_create = entitytype.create_custom_entitytype(f.read(), credentials=credentials)
         print(f'rc is {rc_create}. \nCreate Entity Type test completed successfully')
         entitytype_tests_completed['create_entity'] = True
-    except Exception:
-        print(f'FAILED STEP\nFailed create entity type test')
+    except Exception as msg:
+        print(f'FAILED STEP: {msg}\nFailed create entity type test')
 
 # 2. Sample Usage Module: Delete Entity Type
 with open(entitytype_data_path, 'r') as f:
@@ -43,8 +43,8 @@ with open(entitytype_data_path, 'r') as f:
         rc_delete = entitytype.remove_entitytype(data['entity_type_name'], credentials=credentials)
         print(f'rc is {rc_delete}. \nDelete Entity Type test completed successfully')
         entitytype_tests_completed['remove_entity'] = True
-    except Exception:
-        print(f'FAILED STEP\nFailed delete entity type test')
+    except Exception as msg:
+        print(f'FAILED STEP: {msg}\nFailed delete entity type test')
 
 """-------------------------------CONSTANTS DEMO------------------------
 Usage:
@@ -62,7 +62,7 @@ with open(constants_data_path, 'r') as f:
         print(f'rc is {rc_create}. \nCreate Constants test completed successfully')
         constants_tests_completed['create_constants'] = True
     except Exception as msg:
-        print(f'{msg}\nFAILED STEP\nFailed create constants test')
+        print(f'FAILED STEP: {msg}\nFailed create constants test')
 
 # 2. Sample Usage Module: Update Constants
 with open(constants_data_path, 'r') as f:
@@ -71,12 +71,11 @@ with open(constants_data_path, 'r') as f:
         # update one of the pre-create constants
         update_data = {'constants': [{'name': data['constants'][0]['name'], 'description': 'updated'}]}
         update_data_json = json.dumps(update_data).encode('utf-8')
-        print(update_data)
         rc_update = constants.update_constants(update_data_json, credentials=credentials)
         print(f'rc is {rc_delete}. \nUpdate Constants test completed successfully')
         constants_tests_completed['update_constants'] = True
     except Exception as msg:
-        print(f'{msg}\nFAILED STEP\nFailed update constants test')
+        print(f'FAILED STEP: {msg}\nFailed update constants test')
 
 # 3. Sample Usage Module: Get Constants
 try:
@@ -84,7 +83,7 @@ try:
     print(f'constants are {get_response}. \nGet Constants test completed successfully')
     constants_tests_completed['get_constants'] = True
 except Exception as msg:
-    print(f'{msg}\nFAILED STEP\nFailed get constants test')
+    print(f'FAILED STEP: {msg}\nFailed get constants test')
 
 # 4. Sample Usage Module: Remove Constants
 # collect all constants created so far
@@ -101,7 +100,7 @@ try:
     print(f'rc is {rc_delete}. \nRemove Constants test completed successfully')
     constants_tests_completed['remove_constants'] = True
 except Exception as msg:
-    print(f'{msg}\nFAILED STEP\nFailed delete constants test')
+    print(f'FAILED STEP: {msg}\nFailed delete constants test')
 
 
 """-------------------------------SUMMARY OF TESTS------------------------

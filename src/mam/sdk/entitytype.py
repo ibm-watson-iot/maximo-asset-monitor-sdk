@@ -89,6 +89,7 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
                 "constants": {"type": "array", "items": {"type": "object"}},
                 "dimensions": {"type": "array", "items": {"type": "object"}},
                 "functions": {"type": "array", "items": {"type": "object"}},
+                "metric_timestamp_column_name":{"type": "string"}
             },
             "required": ["entity_type_name"]
         }
@@ -166,8 +167,10 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
 
     # 4. CREATE CUSTOM ENTITY FROM JSON
     # 4.a Instantiate a custom entity type
-    # required columns: _timestamp:evt_timestamp  _entity_id:deviceid
-    #TODO: BaseCustomEntityType.timestamp= add user defined timestamp column
+    #overrides the _timestamp='evt_timestamp'
+    if 'metric_timestamp_column_name':
+        BaseCustomEntityType._timestamp = payload['metric_timestamp_column_name']
+    # TODO: BaseCustomEntityType.timestamp= add user defined timestamp column
     entity_type = BaseCustomEntityType(name=payload['entity_type_name'],
                                        db=db,
                                        columns=metrics,
@@ -213,11 +216,13 @@ def remove_entitytype(entity_type_name, credentials=None):
 
     if response.status_code == 200:
         # 1.b Delete archived entity type
-        APIClient(api_suffix="meta",
-                  http_method_name="DELETE",
-                  endpoint_suffix="/{orgId}/entityType/{entityTypeName}",
-                  path_arguments=path_arguments
-                  ).call_api()
+        response = APIClient(api_suffix="meta",
+                             http_method_name="DELETE",
+                             endpoint_suffix="/{orgId}/entityType/{entityTypeName}",
+                             path_arguments=path_arguments
+                             ).call_api()
+        if response.status_code != 200:
+            logger.warning(f'Entity Type {entity_type_name} was not deleted')
     else:
         logger.debug(f'Unable to archive entity type. Entity type name : {entity_type_name}')
 
@@ -282,6 +287,3 @@ def remove_functions(json_payload, credentials=None):
     :return:
     """
     return 1
-
-
-
