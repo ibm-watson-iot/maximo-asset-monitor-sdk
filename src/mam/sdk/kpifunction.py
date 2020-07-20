@@ -94,7 +94,7 @@ def add_functions(json_payload, credentials=None):
     # 5. CLOSE DB CONNECTION
     db.release_resource()
 
-    return
+    return 1
 
 
 def get_functions(entity_type_name, credentials=None):

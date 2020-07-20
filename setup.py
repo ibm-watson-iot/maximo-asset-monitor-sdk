@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, 'src')
 
 try:
-    from setuptools import setup, find_packages
+    from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
@@ -30,7 +30,10 @@ setup(
     author='Shraddha Singh',
     author_email='shraddha.singh@ibm.com',
     package_dir={'': 'src'},
-    packages=find_packages(),
+    packages=[
+        'mam',
+        'mam.sdk',
+    ],
     #namespace_packages=['mam'],
     #package_data={'mam.sdk': ['*.pem']},
     # scripts=[
