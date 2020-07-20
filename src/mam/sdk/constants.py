@@ -38,7 +38,7 @@ create_constant_schema = {
 }
 
 
-def _ui_constant_to_payload(constants):
+def _ui_constant_to_payload(constants, entity_type_name=None):
     """
     convert a list of UI controls to json payload
 
@@ -57,7 +57,7 @@ def _ui_constant_to_payload(constants):
             del meta['value']
         except KeyError:
             pass
-        payload.append({'name': name, 'entityType': None, 'enabled': True, 'value': default, 'metadata': meta})
+        payload.append({'name': name, 'entityType': entity_type_name, 'enabled': True, 'value': default, 'metadata': meta})
 
     return payload
 
@@ -89,13 +89,14 @@ def create_constants(json_payload, credentials=None):
     :param json_payload:
     ```
     {
+        "entity_type_name":"sample_entity_type_name"
         "constants = [
         {
-            'name': 'sample_constant_name',
-            'datatype' : 'number',
-            'value': 0.3,
-            'default': 0.3,
-            'description': 'optional'
+            "name": "sample_constant_name",
+            "datatype" : "number",
+            "value": 0.3,
+            "default": 0.3,
+            "description": "optional"
             # accepted datatypes: 'str'/'string, 'int'/'integer', 'number'/'float','datetime', 'bool'/'boolean'
         }
         ]
@@ -109,12 +110,16 @@ def create_constants(json_payload, credentials=None):
     validate(instance=payload, schema=create_constant_schema)  # input has valid schema
 
     # 2. INPUT PARSING
+    entity_type_name = None
+    if 'entity_type_name' in payload:
+        entity_type_name = payload['entity_type_name']
+
     constants = None
     if 'constants' in payload:
         constants = payload['constants']
         constants = parse_input_constants(constants)
 
-    create_arguments = json.dumps(_ui_constant_to_payload(constants)).encode('utf-8')
+    create_arguments = json.dumps(_ui_constant_to_payload(constants, entity_type_name)).encode('utf-8')
 
     # 3. API CONNECTION: GET all constants for a tenant
     logger.debug('Connecting to API')
@@ -163,13 +168,18 @@ def update_constants(json_payload, credentials=None):
     :param credentials: dict analytics-service dev credentials
     :param json_payload:
     ```
-    [{
-        'name': 'sample_constant_name',
-        'datatype' : 'number',
-        'default': 0.3,
-        'description': 'optional'
-        # accepted datatypes: 'str'/'string, 'int'/'integer', 'number'/'float','datetime', 'bool'/'boolean'
-    }]
+    {
+        "entity_type_name": "optional"
+        "constants" = [
+        {
+            "name": "sample_constant_name",
+            "datatype" : "number",
+            "default": 0.3,
+            "description": "optional"
+            # accepted datatypes: 'str'/'string, 'int'/'integer', 'number'/'float','datetime', 'bool'/'boolean'
+        }
+        ]
+    }
     ```
     :return:
     """
@@ -179,12 +189,16 @@ def update_constants(json_payload, credentials=None):
     validate(instance=payload, schema=create_constant_schema)  # input has valid schema
 
     # 2. INPUT PARSING
+    entity_type_name = None
+    if 'entity_type_name' in payload:
+        entity_type_name = payload['entity_type_name']
+
     constants = None
     if 'constants' in payload:
         constants = payload['constants']
         constants = parse_input_constants(constants)
 
-    update_arguments = json.dumps(_ui_constant_to_payload(constants)).encode('utf-8')
+    update_arguments = json.dumps(_ui_constant_to_payload(constants, entity_type_name)).encode('utf-8')
 
     # 3. API CONNECTION: GET all constants for a tenant
     logger.debug('Connecting to API')
