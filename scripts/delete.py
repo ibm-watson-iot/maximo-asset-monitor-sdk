@@ -24,7 +24,7 @@ with open(credentials_path, 'r') as F:
 Usage:
 4. (X) Remove Function
 ------------------------------------------------------------------------"""
-tests_completed = {'remove_entity': False}
+tests_completed = {'remove_functions': False}
 # 4. Sample Usage Module: Delete Entity Type
 with open(entitytype_data_path, 'r') as f:
     data = json.load(f)
@@ -33,8 +33,8 @@ with open(entitytype_data_path, 'r') as f:
 print(f'Function enqueued for deletion: {function_created}')
 try:
     rc_delete = kpifunction.remove_function(entity_type_name, function_created, credentials=credentials)
-    print(f'rc is {rc_delete}. \nDelete Entity Type test completed successfully')
-    tests_completed['remove_entity'] = True
+    print(f'rc is {rc_delete}. \nDelete Function test completed successfully')
+    tests_completed['remove_functions'] = True
 except Exception as msg:
     print(f'FAILED STEP: {msg}\nFailed delete entity type test')
 
@@ -65,7 +65,7 @@ except Exception as msg:
 Usage:
 4. (X) Remove Entity Type
 ------------------------------------------------------------------------"""
-tests_completed = {'remove_entity': False}
+tests_completed['remove_entity'] = False
 # 2. Sample Usage Module: Delete Entity Type
 with open(entitytype_data_path, 'r') as f:
     data = json.load(f)

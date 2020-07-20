@@ -31,6 +31,7 @@ create_kpifunction_schema = {
                 "required": ["name"]
             }
         },
+        "entity_type_name": {"type": "string"}
     },
     "required": ["functions"]
 }
