@@ -75,8 +75,9 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
     """
     creates an entity type using the given json payload
     Uses the following APIs:
-    POST /meta/v1/{orgId}/entityType
-    POST /api/kpi/v1/{orgId}/entityType/{entity_type_name}/kpiFunctions/import
+        POST /meta/v1/{orgId}/entityType
+        POST /api/kpi/v1/{orgId}/entityType/{entity_type_name}/kpiFunctions/import
+        POST /api/constants/v1/{orgId}
 
     :param json_payload: JSON describes metadata required for creating desired entity type
     expected json schema is as follows:
@@ -228,15 +229,18 @@ def remove_entitytype(entity_type_name, credentials=None):
 
     return 1
 
+#for a given entity type can I just add metrics?
+#can I add metric names using csv
 
-def create_metrics(json_payload, credentials=None):
+
+def add_metrics(json_payload, credentials=None):
     """
     add metrics to a given entity type
     :param credentials: dict analytics-service dev credentials
     :param json_payload:
     :return:
     """
-    return 1
+    raise Exception("Not supported in the sdk")
 
 
 def update_metrics(json_payload, credentials=None):
@@ -246,7 +250,17 @@ def update_metrics(json_payload, credentials=None):
     :param credentials: dict analytics-service dev credentials
     :return:
     """
-    return 1
+    raise Exception("Not supported in the sdk")
+
+
+def get_metrics(entity_type_name, crednetials=None):
+    """
+
+    :param entity_type_name:
+    :param crednetials:
+    :return:
+    """
+    raise Exception("Not supported in the sdk")
 
 
 def remove_metrics(json_payload, credentials=None):
@@ -256,34 +270,4 @@ def remove_metrics(json_payload, credentials=None):
     :param credentials: dict analytics-service dev credentials
     :return:
     """
-    return 1
-
-
-def create_functions(json_payload, credentials=None):
-    """
-    add kpi functions to a given entity type
-    :param credentials: dict analytics-service dev credentials
-    :param json_payload:
-    :return:
-    """
-    return 1
-
-
-def update_functions(json_payload, credentials=None):
-    """
-    add kpi functions to a given entity type
-    :param credentials: dict analytics-service dev credentials
-    :param json_payload:
-    :return:
-    """
-    return 1
-
-
-def remove_functions(json_payload, credentials=None):
-    """
-
-    :param json_payload:
-    :param credentials: dict analytics-service dev credentials
-    :return:
-    """
-    return 1
+    raise Exception("Not supported in the sdk")

@@ -64,7 +64,7 @@ def _ui_constant_to_payload(constants):
 
 def _constant_name_to_payload(constant_names):
     """
-    convert a list
+    convert a list of constant names
     :param constant_names: str/list of constant names
     :return: dict
     """
@@ -88,14 +88,18 @@ def create_constants(json_payload, credentials=None):
     :param credentials: dict analytics-service dev credentials
     :param json_payload:
     ```
-    [{
-        'name': 'sample_constant_name',
-        'datatype' : 'number',
-        'value': 0.3,
-        'default': 0.3,
-        'description': 'optional'
-        # accepted datatypes: 'str'/'string, 'int'/'integer', 'number'/'float','datetime', 'bool'/'boolean'
-    }]
+    {
+        "constants = [
+        {
+            'name': 'sample_constant_name',
+            'datatype' : 'number',
+            'value': 0.3,
+            'default': 0.3,
+            'description': 'optional'
+            # accepted datatypes: 'str'/'string, 'int'/'integer', 'number'/'float','datetime', 'bool'/'boolean'
+        }
+        ]
+    }
     ```
     :return:
     """
