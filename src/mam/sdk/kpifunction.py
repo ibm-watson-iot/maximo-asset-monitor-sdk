@@ -15,7 +15,6 @@ from .apiclient import (APIClient)
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-
 # schema expected for creating kpi functions for entity type
 create_kpifunction_schema = {
     "type": "object",
@@ -126,6 +125,7 @@ def get_functions(entity_type_name, credentials=None):
     return response.json()
 
 
+# TODO: Implement this function
 def update_functions(json_payload, credentials=None):
     """
     update kpi functions for a given entity type.
@@ -136,13 +136,10 @@ def update_functions(json_payload, credentials=None):
     :param json_payload:
     :return:
     """
-    #do the add but get the 'name' first -> is user defined
-    #then
+    # do the add but get the 'name' first -> is user defined
+    # then
     raise Exception("Not supported in the sdk. Configure through UI")
 
-
-#THIS FUNCTION WILL DELETE THE LAST KPI with the same FUNCTION_NAME
-#TODO: Change this allow user to pick a function they want to delete?
 
 def remove_function(entity_type_name, kpi_name, credentials=None):
     """
