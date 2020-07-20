@@ -1,7 +1,6 @@
 from mam.sdk import (entitytype,
                      constants,
-                     kpifunction,
-                     dimension)
+                     kpifunction)
 import json
 
 #DEFINE PATH TO REQUIRED FILES
