@@ -21,10 +21,10 @@ with open(credentials_path, 'r') as F:
 
 """-------------------------------ENTITY TYPE DEMO------------------------
 Usage:
-1. Create Entity Type - using a json payload
-2. Update Entity Type - using a json payload
-3. Get Entity Type
-4. Remove Entity Type
+1. (X) Create Entity Type - using a json payload
+2. () Update Entity Type - using a json payload
+3. () Get Entity Type
+4. (X) Remove Entity Type
 ------------------------------------------------------------------------"""
 entitytype_tests_completed = {'create_entity': False, 'remove_entity': False}
 # 1. Sample Usage Module: Create Entity Type
@@ -48,10 +48,10 @@ with open(entitytype_data_path, 'r') as f:
 
 """-------------------------------CONSTANTS DEMO------------------------
 Usage:
-1. Create Constants - using a json payload
-2. Update Constants - using a json payload
-3. Get Constants
-4. Remove Constants
+1. (X) Create Constants - using a json payload
+2. (X) Update Constants - using a json payload
+3. (X) Get Constants
+4. (X) Remove Constants
 ----------------------------------------------------------------------"""
 constants_tests_completed = {'create_constants': False, 'update_constants': False, 'get_constants': False,
                              'remove_constants': False}

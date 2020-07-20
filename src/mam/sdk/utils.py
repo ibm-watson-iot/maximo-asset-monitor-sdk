@@ -121,6 +121,10 @@ def generate_api_environment(credentials):
     :param credentials:
     :return: environment
     """
+
+    if credentials is None:
+        raise Exception("No credentials provided")
+
     environment = {'authentication_header': {}}
 
     if credentials['tenantId'] is None:
