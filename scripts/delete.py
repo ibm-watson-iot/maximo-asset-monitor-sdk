@@ -1,3 +1,5 @@
+#  © Copyright IBM Corp. 2020
+
 from mam.sdk import (entitytype,
                      constants,
                      kpifunction)

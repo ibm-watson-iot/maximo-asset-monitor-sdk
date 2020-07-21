@@ -1,3 +1,5 @@
+#  © Copyright IBM Corp. 2020
+
 import requests
 import logging
 

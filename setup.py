@@ -1,3 +1,5 @@
+#  © Copyright IBM Corp. 2020
+
 import sys
 sys.path.insert(0, 'src')
 
