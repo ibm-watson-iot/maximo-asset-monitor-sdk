@@ -188,8 +188,6 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
     # 5. CLOSE DB CONNECTION
     db.release_resource()
 
-    return 1
-
 
 def remove_entitytype(entity_type_name, credentials=None):
     """
@@ -230,46 +228,3 @@ def remove_entitytype(entity_type_name, credentials=None):
         logger.debug(f'Unable to archive entity type. Entity type name : {entity_type_name}')
 
     return 1
-
-#for a given entity type can I just add metrics?
-#can I add metric names using csv
-
-
-def add_metrics(json_payload, credentials=None):
-    """
-    add metrics to a given entity type
-    :param credentials: dict analytics-service dev credentials
-    :param json_payload:
-    :return:
-    """
-    raise Exception("Not supported in the sdk")
-
-
-def update_metrics(json_payload, credentials=None):
-    """
-
-    :param json_payload:
-    :param credentials: dict analytics-service dev credentials
-    :return:
-    """
-    raise Exception("Not supported in the sdk")
-
-
-def get_metrics(entity_type_name, crednetials=None):
-    """
-
-    :param entity_type_name:
-    :param crednetials:
-    :return:
-    """
-    raise Exception("Not supported in the sdk")
-
-
-def remove_metrics(json_payload, credentials=None):
-    """
-
-    :param json_payload:
-    :param credentials: dict analytics-service dev credentials
-    :return:
-    """
-    raise Exception("Not supported in the sdk")

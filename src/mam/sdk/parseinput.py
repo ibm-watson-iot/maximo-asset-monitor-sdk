@@ -80,6 +80,33 @@ def parse_input_constants(constants):
     return ret_constants
 
 
+def parse_input_dimension_data(dimension_data):
+    """
+    map the key-values in create_dimension_data schema to dimensional api body key-values
+
+    :param dimensional_data: dict with key-values in create_dimension_data schema
+    :return: dict with key-values mapped to dimensional api body key-values
+    """
+    ret_dimensions = []
+    for d in dimension_data:
+        ret_dict = {}
+        if 'datatype' in d:
+            ret_dict['type'] = api_type(d['datatype'])
+        if 'value' in d:
+            ret_dict['value'] = d['value']
+        if 'name' in d:
+            ret_dict['name'] = d['name']
+        if 'entity_id' in d:
+            ret_dict['id'] = d['entity_id']
+
+        if 'datatype' in d and d['datatype'] == 'datetime':
+            ret_dict['value'] = validate_and_normalize_timestamp(d['value'])
+
+        ret_dimensions.append(ret_dict)
+
+    return ret_dimensions
+
+
 def parse_input_functions(functions, credentials=None):
     """
     generate function object from function names

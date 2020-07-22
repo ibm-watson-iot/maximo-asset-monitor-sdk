@@ -158,3 +158,26 @@ def generate_api_environment(credentials):
             environment['base_url'] = credentials['iotp']['asHost']
 
     return environment
+
+
+# converting user input 'type' to python built-in type
+_type_user_to_api_dict = {
+    'int': 'NUMBER',
+    'integer': 'NUMBER',
+    'string': 'LITERAL',
+    'str': 'LITERAL',
+    'number': 'NUMBER',
+    'float': 'NUMBER',
+    'datetime': 'TIMESTAMP',
+    'bool': 'BOOLEAN',
+    'boolean': 'BOOLEAN'
+}
+
+
+def api_type(type):
+    """Return the closest python type for a given string"""
+    if type in _type_user_to_api_dict:
+        return _type_user_to_api_dict[type.lower()]
+    else:
+        raise NotImplementedError(
+            "You may add custom `datatype` to `" + str(type) + "` assignment in `_type_user_to_api_dict`.")
