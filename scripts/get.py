@@ -2,7 +2,8 @@
 
 from mam.sdk import (entitytype,
                      constants,
-                     kpifunction)
+                     kpifunction,
+                     dimension)
 import json
 
 #DEFINE PATH TO REQUIRED FILES
@@ -27,6 +28,17 @@ Usage:
 3. () Get Entity Type
 ------------------------------------------------------------------------"""
 
+"""-------------------------------DIMENSIONS (ENTITY TYPE) DEMO------------------------
+Usage:
+3. (X) Get all dimensions
+-------------------------------------------------------------------------------------"""
+# 3. Sample Usage Module: Get Entity Type Dimensions
+try:
+    get_response = dimension.get_dimensions_data(credentials=credentials,  entity_type_name='shraddha_test_1151_1')
+    print(f'dimensions are {get_response}. \nGet Functions test completed successfully')
+    tests_completed['get_dimensions'] = True
+except Exception as msg:
+    print(f'FAILED STEP: {msg}\nFailed get functions test')
 
 """-------------------------------FUNCTIONS (ENTITY TYPE) DEMO------------------------
 Usage:

@@ -2,7 +2,8 @@
 
 from mam.sdk import (entitytype,
                      constants,
-                     kpifunction)
+                     kpifunction,
+                     dimension)
 import json
 
 #DEFINE PATH TO REQUIRED FILES
@@ -38,7 +39,22 @@ try:
     print(f'rc is {rc_delete}. \nDelete Function test completed successfully')
     tests_completed['remove_functions'] = True
 except Exception as msg:
-    print(f'FAILED STEP: {msg}\nFailed delete entity type test')
+    print(f'FAILED STEP: {msg}\nFailed delete function test')
+
+"""-------------------------------DIMENSIONS DELETE DEMO------------------------
+Usage:
+4. (X) Remove Dimension 
+------------------------------------------------------------------------------"""
+with open(entitytype_data_path, 'r') as f:
+    data = json.load(f)
+    dimension_created = [d['name'] for d in data['dimensions']]
+    entity_type_name = data['entity_type_name']
+try:
+    dimension.remove_dimensions(credentials=credentials,  dimension_names=dimension_created,
+                               entity_type_name=entity_type_name)
+    tests_completed['remove_dimensions'] = True
+except Exception as msg:
+    print(f'FAILED STEP: {msg}\nFailed delete dimension test')
 
 """-------------------------------CONSTANTS DEMO------------------------
 Usage:

@@ -188,8 +188,6 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
     # 5. CLOSE DB CONNECTION
     db.release_resource()
 
-    return 1
-
 
 def remove_entitytype(entity_type_name, credentials=None):
     """

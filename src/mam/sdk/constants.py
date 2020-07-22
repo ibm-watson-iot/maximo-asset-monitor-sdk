@@ -134,9 +134,7 @@ def create_constants(json_payload, credentials=None):
                          ).call_api()
 
     if response.status_code != 200:
-        raise Exception('API Client call failed when updating constants')
-
-    return 1
+        raise Exception('API Client call failed when adding constants')
 
 
 def get_constants(credentials=None, entity_type_name=None):
@@ -161,6 +159,9 @@ def get_constants(credentials=None, entity_type_name=None):
                          endpoint_suffix="/{orgId}",
                          query_arguments=query_arguments,
                          ).call_api()
+    if response.status_code != 200:
+        raise Exception('API Client call failed when getting constants')
+
     return response.json()
 
 
@@ -239,10 +240,5 @@ def remove_constants(constant_names, credentials=None):
                          endpoint_suffix="/{orgId}",
                          body=body_arguments,
                          ).call_api()
-    try:
-        msg = 'Constants deletion status: %s' % (response.data.decode('utf-8'))
-    except AttributeError:
-        msg = 'Constants deletion status: %s' % response
-    logger.info(msg)
-
-    return 1
+    if response.status_code != 200:
+        raise Exception('API Client call failed when deleting constants')
