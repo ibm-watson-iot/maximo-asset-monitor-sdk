@@ -315,4 +315,4 @@ def remove_entitytype(entity_type_name, credentials=None):
     else:
         logger.debug(f'Unable to archive entity type. Entity type name : {entity_type_name}')
 
-    return
+    return response.json()

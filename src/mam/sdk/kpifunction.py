@@ -103,7 +103,7 @@ def add_functions(json_payload, credentials=None):
     # 5. CLOSE DB CONNECTION
     db.release_resource()
 
-    return 1
+    return
 
 
 def get_functions(entity_type_name, credentials=None):
@@ -182,4 +182,4 @@ def remove_function(entity_type_name, kpi_name, credentials=None):
     except AttributeError:
         msg = 'Function deletion status: %s' % response
     logger.info(msg)
-    return 1
+    return response.json()
