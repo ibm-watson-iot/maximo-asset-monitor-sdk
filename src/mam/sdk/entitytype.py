@@ -1,9 +1,17 @@
-#  © Copyright IBM Corp. 2020
+#  | * IBM Confidential
+#  | * OCO Source Materials
+#  | * 5737-M66
+#  | * © Copyright IBM Corp. 2020
+#  | * The source code for this program is not published or otherwise divested of its
+#  | * trade secrets, irrespective of what has been deposited with the U.S.
+#  | * Copyright Office.
 
 # python libraries
 import json
 import logging
 from jsonschema import validate
+import datetime as dt
+import pandas as pd
 
 # iotfunctions modules
 from iotfunctions.metadata import (BaseCustomEntityType)
@@ -14,7 +22,8 @@ from .utils import *
 from .parseinput import *
 from .apiclient import (APIClient)
 
-logging.basicConfig(level=logging.DEBUG)
+from iotfunctions.enginelog import EngineLogging
+EngineLogging.configure_console_logging(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # schema expected for creating entity type
@@ -170,7 +179,7 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
 
     # 4. CREATE CUSTOM ENTITY FROM JSON
     # 4.a Instantiate a custom entity type
-    #overrides the _timestamp='evt_timestamp'
+    # overrides the _timestamp='evt_timestamp'
     if 'metric_timestamp_column_name':
         BaseCustomEntityType._timestamp = payload['metric_timestamp_column_name']
     # TODO: BaseCustomEntityType.timestamp= add user defined timestamp column
@@ -187,6 +196,85 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
 
     # 5. CLOSE DB CONNECTION
     db.release_resource()
+
+
+def load_entitytype_data_from_csv(entity_type_name, file_path, credentials=None, **kwargs):
+    """
+    reads data from csv and stores in entity type table
+    Note: make sure 'deviceid' and '_timestamp' () columns are present in csv
+    '_timestamp' column will be inferred to be current time if None present
+
+    :param entity_type_name: str name of entity we want to load data for
+    :param file_path: str path to csv file
+    :param credentials: dict analytics-service dev credentials
+    :param **kwargs {
+        db_schema str if no schema is provided will use the default schema
+        if_exists str default:append
+    }
+    :return:
+    """
+    # load csv in dataframe
+    df = pd.read_csv(file_path)
+
+    # Map the lowering function to all column names
+    # required columns are lower case
+    df.columns = map(str.lower, df.columns)
+
+    # DATABASE CONNECTION
+    # :description: to access Watson IOT Platform Analytics DB.
+    logger.debug('Connecting to Database')
+    db = Database(credentials=credentials)
+    # check if entity type table exists
+    db_schema = None
+    if 'db_schema' in kwargs:
+        db_schema = kwargs['db_schema']
+    #get the entity type to add data to
+    try:
+        entity_type = db.get_entity_type(entity_type_name)
+    except:
+        raise Exception(f'No entity type {entity_type_name} found.'
+                        f'Make sure you create entity type before loading data using csv.'
+                        f'Refer to create_custom_entitytype() to create the entity type first')
+
+    # find required columns
+    required_cols = db.get_column_names(table=entity_type.name, schema=db_schema)
+    missing_cols = list(set(required_cols) - set(df.columns))
+    logger.debug(f'missing_cols : {missing_cols}')
+    # Add data for missing columns that are required
+    # required columns that can't be NULL {'evt_timestamp',', 'updated_utc', 'devicetype'}
+    for m in missing_cols:
+        if m == entity_type._timestamp:
+            #get possible timestamp columns and select the first one from all candidate
+            df_timestamp = df.filter(like='_timestamp')
+            if not df_timestamp.empty:
+                df_timestamp_columns = df_timestamp.columns
+                timestamp_col = df_timestamp_columns[0]
+                df[m] = pd.to_datetime(df_timestamp[timestamp_col])
+                logger.debug(f'Inferred column {timestamp_col} as missing column {m}')
+            else:
+                df[m] = dt.datetime.utcnow() - dt.timedelta(seconds=15)
+                logger.debug(f'Adding data: current time to missing column {m}')
+        elif m == 'devicetype':
+            df[m] = entity_type.logical_name
+            logger.debug(f'Adding data: {entity_type.logical_name} to missing column {m}')
+        elif m == 'updated_utc':
+            logger.debug(f'Adding data: current time to missing column {m}')
+            df[m] = dt.datetime.utcnow() - dt.timedelta(seconds=15)
+        elif m == entity_type._entity_id:
+            raise Exception(f'Missing required column {m}')
+        else:
+            df[m] = None
+
+    # remove columns that are not required
+    df = df[required_cols]
+    # write the dataframe to the database table
+    db.write_frame(df=df, table_name=entity_type.name)
+    logger.debug(f'Generated {len(df.index)} rows of data and inserted into {entity_type.name}')
+
+    # CLOSE DB CONNECTION
+    db.release_resource()
+
+    return
 
 
 def remove_entitytype(entity_type_name, credentials=None):

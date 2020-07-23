@@ -3,7 +3,7 @@
     "metrics": [
         {
             "name":"metric_1",
-            "datatype": "str"
+            "datatype": "number"
         }
     ],
     "constants": [ 

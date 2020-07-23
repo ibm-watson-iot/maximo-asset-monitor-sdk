@@ -1,4 +1,10 @@
-#  © Copyright IBM Corp. 2020
+#  | * IBM Confidential
+#  | * OCO Source Materials
+#  | * 5737-M66
+#  | * © Copyright IBM Corp. 2020
+#  | * The source code for this program is not published or otherwise divested of its
+#  | * trade secrets, irrespective of what has been deposited with the U.S.
+#  | * Copyright Office.
 
 # python libraries
 import json
@@ -13,7 +19,8 @@ from .utils import *
 from .parseinput import *
 from .apiclient import (APIClient)
 
-logging.basicConfig(level=logging.DEBUG)
+from iotfunctions.enginelog import EngineLogging
+EngineLogging.configure_console_logging(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # /constants/v1/{tenantName} POST GET PUT DELETE
