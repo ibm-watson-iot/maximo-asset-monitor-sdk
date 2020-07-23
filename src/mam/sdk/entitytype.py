@@ -198,11 +198,11 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
     db.release_resource()
 
 
-def load_entitytype_data_from_csv(entity_type_name, file_path, credentials=None, **kwargs):
+def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **kwargs):
     """
-    reads data from csv and stores in entity type table
-    Note: make sure 'deviceid' and '_timestamp' () columns are present in csv
-    '_timestamp' column will be inferred to be current time if None present
+    reads metrics data from csv and stores in entity type metrics table
+    Note: make sure 'deviceid' and 'evt_timestamp' columns are present in csv
+    'evt_timestamp' column will be inferred to be current time if None present
 
     :param entity_type_name: str name of entity we want to load data for
     :param file_path: str path to csv file
@@ -315,4 +315,4 @@ def remove_entitytype(entity_type_name, credentials=None):
     else:
         logger.debug(f'Unable to archive entity type. Entity type name : {entity_type_name}')
 
-    return 1
+    return
