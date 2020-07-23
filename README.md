@@ -20,17 +20,17 @@ To use this application, you'll need python 3.7+ installed on your computer. Fol
 
 Follow the step by step example to get the env running
 
-Step 1. Create a virtual environment
+**Step 1** Create a virtual environment
 ```
 python3 -m venv env
 ```
 
-Step 2. Activate virtual environment
+**Step 2** Activate virtual environment
 ```
 source env/bin/activate
 ```
 
-Step 3. Install sdk from github
+**Step 3** Install sdk from github
 
 ```
 pip install git+https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk.git
@@ -51,20 +51,20 @@ bash ./dev_resources/mac_ibmdb_fix.sh
 ## Supported Modules
 Module  | Description | Input | Output
 --- | :---- | --- | ---
-[create_custom_entitytype](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/entitytype.py#L85) | creates an entity type using json payload | `json_payload`: [sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_usage_data.json)<br/><br/>`credentials`: local json file <br/><br/>**kwargs{`drop_existing`<br/>`db_schema`} | None
-[load_metrics_data_from_csv](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/entitytype.py#L201) | read metrics data for existing entity type | `entity_type_name`<br/><br/>`file_path`<br/><br/>`credentials` | None
-[remove_entitytype](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/entitytype.py#L280) | delete entity type | `entity_type_name`<br/><br/>`credentials`| None
-[add_functions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/kpifunction.py#L48) | add kpi functions to an entity type |`json_payload`:[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_function_data.json)<br/><br/>`credentials` |
-[get_functions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/kpifunction.py#L109) | get all kpi functions for an entity type |`entity_type_name`<br/><br/>`credentials` | 
-[remove_function](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/kpifunction.py#L153) | delete a kpi functions from an entity type's functions |`entity_type_name`<br/><br/>`kpi_name`<br/><br/>`crednetials` | 
-[create_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L90) | register a constant (at global scope) | `json_payload`:[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_constant_data.json)<br/><br/>`credentials` |
-[get_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L147) | get all constants for a tenant | `entity_type_name`<br/><br/>`credentials` |
-[update_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L175) | update constants for a tenant | `json_payload`:[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_constant_data.json)<br/><br/>`credentials` |
-[remove_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L229) | unregister constants by name |`constant_names`<br/><br/>`credentials`  |
-[add_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L66) | add dimension data for entities |`json_payload`:[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_dimension_data.json)<br/><br/>`credentials`  |
-[get_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L136) | get all the dimensional data for an entity type |`entity_type_name`<br/><br/>`credentials`  |
-[update_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L123) | update existing dimension data | `json_payload`:[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_dimension_data.json)<br/><br/>`credentials`  |
-[remove_dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L162) | delete dimension data by name | `dimension_names`<br/><br/>`entity_type_name`<br/><br/>`credentials` |
+[create_custom_entitytype](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/entitytype.py#L85) | creates an entity type using json payload | `json_payload`[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_usage_data.json)<br/>`credentials` [getting credentials](#save-your-credentials-to-a-file) <br/> `**kwargs`<br/>{<br/>`drop_existing`<br/>`db_schema`<br/>} | None
+[load_metrics_data_from_csv](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/entitytype.py#L201) | read metrics data for existing entity type | `entity_type_name`<br/>`file_path`<br/>`credentials` | None
+[remove_entitytype](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/entitytype.py#L280) | delete entity type | `entity_type_name`<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file)| None
+[add_functions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/kpifunction.py#L48) | add kpi functions to an entity type |`json_payload`[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_function_data.json)<br/>`credentials` | None
+[get_functions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/kpifunction.py#L109) | get all kpi functions for an entity type |`entity_type_name`<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file) | list of dict with kpi functions
+[remove_function](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/kpifunction.py#L153) | delete a kpi functions from an entity type's functions |`entity_type_name`<br/>`kpi_name`<br/>`crednetials`[getting credentials](#save-your-credentials-to-a-file) | None
+[create_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L90) | register a constant (at global scope) | `json_payload`[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_constant_data.json)<br/>`credentials` | None
+[get_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L147) | get all constants for a tenant | `entity_type_name`<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file) | list of dict with constants information
+[update_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L175) | update constants for a tenant | `json_payload`[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_constant_data.json)<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file) | None
+[remove_constants](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/constants.py#L229) | unregister constants by name |`constant_names`<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file)  | None
+[add_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L66) | add dimension data for entities |`json_payload`[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_dimension_data.json)<br/>`credentials`  | api response
+[get_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L136) | get all the dimensional data for an entity type |`entity_type_name`<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file)  | list of dict with dimension data information
+[update_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L123) | update existing dimension data | `json_payload`:[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_dimension_data.json)<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file)  | api response
+[remove_dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L162) | delete dimension data by name | `dimension_names`<br/>`entity_type_name`<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file) | api response
 
 ## How To Use
 
