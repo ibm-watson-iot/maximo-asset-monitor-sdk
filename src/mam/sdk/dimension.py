@@ -130,7 +130,7 @@ def update_dimensions_data(json_payload, credentials=None):
     :param credentials: dict analytics-service dev credentials
     :return:
     """
-    return add_dimension_data(json_payload, credentials)
+    return add_dimensions_data(json_payload, credentials)
 
 
 def get_dimensions_data(entity_type_name, credentials=None):

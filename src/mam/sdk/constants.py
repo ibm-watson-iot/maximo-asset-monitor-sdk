@@ -144,7 +144,7 @@ def create_constants(json_payload, credentials=None):
         raise Exception('API Client call failed when adding constants')
 
 
-def get_constants(credentials=None, entity_type_name=None):
+def get_constants(entity_type_name=None, credentials=None, ):
     """
     get all constants for a tenant
     Uses the following APIs:
