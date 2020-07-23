@@ -143,6 +143,8 @@ def create_constants(json_payload, credentials=None):
     if response.status_code != 200:
         raise Exception('API Client call failed when adding constants')
 
+    return response.json()
+
 
 def get_constants(entity_type_name=None, credentials=None, ):
     """
@@ -223,7 +225,7 @@ def update_constants(json_payload, credentials=None):
     if response.status_code != 200:
         raise Exception('API Client call failed when updating constants')
 
-    return 1
+    return response.json()
 
 
 def remove_constants(constant_names, credentials=None):
@@ -249,3 +251,5 @@ def remove_constants(constant_names, credentials=None):
                          ).call_api()
     if response.status_code != 200:
         raise Exception('API Client call failed when deleting constants')
+
+    return response.json()
