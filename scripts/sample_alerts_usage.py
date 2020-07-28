@@ -25,6 +25,22 @@ print('Reading Analytics Credentials')
 with open(credentials_path, 'r') as F:
     credentials = json.load(F)
 
+#get all alerts
+with open(get_alerts_payload, 'r') as payload:
+    get_response = alerts.get_alerts(payload.read(), credentials)
+    print(get_response)
+
+
+#changes alert status
+alerts.update_alert_status(alert_id='1409504862',
+                           new_status='dismissed',
+                           credentials=credentials)
+#changes alert severity
+alerts.update_alert_severity(alert_id='1409504862',
+                             new_severity='high',
+                             credentials=credentials)
+
+#get all alerts
 with open(get_alerts_payload, 'r') as payload:
     get_response = alerts.get_alerts(payload.read(), credentials)
     print(get_response)
