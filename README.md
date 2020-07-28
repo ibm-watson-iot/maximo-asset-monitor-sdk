@@ -81,10 +81,10 @@ Important: The credentials file is used to run or test the function locally. Do 
 
 ### Usage of sdk modules
 Sample usage scripts 
-* [creating entities, adding functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/create.py)
-* [loading entity data from csv](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/load_csv_data.py)
-* [removing entity type, functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/delete.py)
-* [getting functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/get.py)
+* [creating entities, adding functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_create_modules.py)
+* [loading entity data from csv](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_load_csv_data.py)
+* [removing entity type, functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_delete_modules.py)
+* [getting functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_get_modules.py)
 
 To interact with any module, we first need to load the credentials in our script
 ```python
