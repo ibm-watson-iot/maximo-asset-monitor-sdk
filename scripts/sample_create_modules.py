@@ -61,9 +61,9 @@ with open(function_data_path, 'r') as f:
     except Exception as msg:
         print(f'FAILED STEP: {msg}\nFailed add functions test')
 
-"""-------------------------------ADD DIMENSION DATA TO ENTITY TYPE DEMO------------------------
+"""-------------------------------ADD DIMENSION DATA TO ENTITY TYPE DEMO--------------------
 Usage:
-1. (X) Add Function - using a json payload
+1. (X) Add Dimension - using a json payload
 ------------------------------------------------------------------------------------------"""
 tests_completed['add_dimension_data'] = False
 # 1. Sample Usage Module: Create Entity Type
@@ -92,9 +92,6 @@ with open(constants_data_path, 'r') as f:
 
 
 """-------------------------------SUMMARY OF CREATION TESTS------------------------
-1. entitytype_tests_completed
-2. functions_tests_completed
-3. constants_tests_completed
 ---------------------------------------------------------------------------------"""
 print('Summary of all tests run')
 for name, status in tests_completed.items():

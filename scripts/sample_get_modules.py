@@ -29,10 +29,6 @@ with open(credentials_path, 'r') as F:
 
 tests_completed = {}
 
-"""-------------------------------ENTITY TYPE DEMO------------------------
-Usage:
-3. () Get Entity Type
-------------------------------------------------------------------------"""
 
 """-------------------------------DIMENSIONS (ENTITY TYPE) DEMO------------------------
 Usage:
@@ -74,10 +70,7 @@ except Exception as msg:
     print(f'FAILED STEP: {msg}\nFailed get constants test')
 
 
-"""-------------------------------SUMMARY OF TESTS------------------------
-1. entitytype tests
-2. functions tests
-3. constants tests
+"""-------------------------------SUMMARY OF GET TESTS--------------------
 ------------------------------------------------------------------------"""
 print('Summary of all tests run')
 for name, status in tests_completed.items():

@@ -102,9 +102,6 @@ with open(entitytype_data_path, 'r') as f:
 
 
 """-------------------------------SUMMARY OF DELETE TESTS------------------------
-1. function tests
-2. constants tests
-3. entitytype tests
 ------------------------------------------------------------------------------"""
 print('Summary of all tests run')
 for name, status in tests_completed.items():
