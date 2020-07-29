@@ -65,6 +65,9 @@ Module  | Description | Input | Output
 [get_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L136) | get all the dimensional data for an entity type |`entity_type_name` str name of entity type <br/>`credentials`[getting credentials](#save-your-credentials-to-a-file)  | list of dict with dimension data information (api response)
 [update_dimensions_data](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L123) | update existing dimension data | `json_payload`:[sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_dimension_data.json)<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file)  | api response
 [remove_dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/dimension.py#L162) | delete dimension data by name | `dimension_names` list of dimension names to delete <br/>`entity_type_name`<br/>`credentials`[getting credentials](#save-your-credentials-to-a-file) | api response
+[get_alerts](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/alerts.py#L51) | get all alerts using a json payload | `json_payload` [sample payload](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/data/sample_alerts_data.json)  <br/>`credentials`[getting credentials](#save-your-credentials-to-a-file) | api response
+[update_alert_status](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/alerts.py#L118) | update alert status using alert id | `alert_id` can get alert id using get_alerts <br/> `new_status` allowed values are: *New, Acknowledged, Resolved, Dismissed* <br/> `credentials`[getting credentials](#save-your-credentials-to-a-file) | None
+[update_alert_severity](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/391a9eaacebc72fc9dd8a29a04705793c1579bb5/src/mam/sdk/alerts.py#L157) | update alert severity using alert id | `alert_id` can get alert id using get_alerts <br/> `new_status` allowed values are *Low, Medium, High, Medium-High* <br/> `credentials`[getting credentials](#save-your-credentials-to-a-file) | None
 
 ## How To Use
 
@@ -85,6 +88,7 @@ Sample usage scripts
 * [loading entity data from csv](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_load_csv_data.py)
 * [removing entity type, functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_delete_modules.py)
 * [getting functions, constants, dimensions](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_get_modules.py)
+* [getting all alerts for entity type, updating alert status and severity](https://github.com/ibm-watson-iot/maximo-asset-monitor-sdk/blob/master/scripts/sample_alerts_usage.py)
 
 To interact with any module, we first need to load the credentials in our script
 ```python
