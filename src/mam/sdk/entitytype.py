@@ -223,27 +223,31 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
     # DATABASE CONNECTION
     # :description: to access Watson IOT Platform Analytics DB.
     logger.debug('Connecting to Database')
-    db = Database(credentials=credentials)
+    db = Database(credentials=credentials, entity_type=entity_type_name)
     # check if entity type table exists
     db_schema = None
     if 'db_schema' in kwargs:
         db_schema = kwargs['db_schema']
     #get the entity type to add data to
-    try:
-        entity_type = db.get_entity_type(entity_type_name)
-    except:
+    entity_type_metadata = db.entity_type_metadata.get(entity_type_name)
+    if entity_type_metadata is None:
         raise Exception(f'No entity type {entity_type_name} found.'
                         f'Make sure you create entity type before loading data using csv.'
                         f'Refer to create_custom_entitytype() to create the entity type first')
 
     # find required columns
-    required_cols = db.get_column_names(table=entity_type.name, schema=db_schema)
+    timestamp_col_name = entity_type_metadata['metricTimestampColumn']
+    logical_name = entity_type_metadata['name']
+    table_name = entity_type_metadata['metricTableName']
+    deviceid_col = 'deviceid'
+
+    required_cols = db.get_column_names(table=table_name, schema=db_schema)
     missing_cols = list(set(required_cols) - set(df.columns))
     logger.debug(f'missing_cols : {missing_cols}')
     # Add data for missing columns that are required
     # required columns that can't be NULL {'evt_timestamp',', 'updated_utc', 'devicetype'}
     for m in missing_cols:
-        if m == entity_type._timestamp:
+        if m == timestamp_col_name:
             #get possible timestamp columns and select the first one from all candidate
             df_timestamp = df.filter(like='_timestamp')
             if not df_timestamp.empty:
@@ -255,12 +259,12 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
                 df[m] = dt.datetime.utcnow() - dt.timedelta(seconds=15)
                 logger.debug(f'Adding data: current time to missing column {m}')
         elif m == 'devicetype':
-            df[m] = entity_type.logical_name
-            logger.debug(f'Adding data: {entity_type.logical_name} to missing column {m}')
+            df[m] = logical_name
+            logger.debug(f'Adding data: {logical_name} to missing column {m}')
         elif m == 'updated_utc':
             logger.debug(f'Adding data: current time to missing column {m}')
             df[m] = dt.datetime.utcnow() - dt.timedelta(seconds=15)
-        elif m == entity_type._entity_id:
+        elif m == deviceid_col:
             raise Exception(f'Missing required column {m}')
         else:
             df[m] = None
@@ -268,8 +272,8 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
     # remove columns that are not required
     df = df[required_cols]
     # write the dataframe to the database table
-    db.write_frame(df=df, table_name=entity_type.name)
-    logger.debug(f'Generated {len(df.index)} rows of data and inserted into {entity_type.name}')
+    db.write_frame(df=df, table_name=table_name)
+    logger.debug(f'Generated {len(df.index)} rows of data and inserted into {table_name}')
 
     # CLOSE DB CONNECTION
     db.release_resource()

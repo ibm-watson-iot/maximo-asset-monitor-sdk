@@ -5,8 +5,8 @@ import pandas as pd
 
 #DEFINE PATH TO REQUIRED FILES
 #relative to where you run script from
-credentials_path = './dev_resources/credentials.json'
-csv_data_path = './data/sample_csv_data.csv'
+credentials_path = '../dev_resources/credentials.json'
+csv_data_path = '../data/sample_csv_data.csv'
 
 #LOADING DATABASE CREDENTIALS
 '''
@@ -19,4 +19,4 @@ print('Reading Analytics Credentials')
 with open(credentials_path, 'r') as F:
     credentials = json.load(F)
 
-entitytype.load_entitytype_data_from_csv('shraddha_test_1151_1', csv_data_path, credentials=credentials)
+entitytype.load_metrics_data_from_csv('shraddha_boiler', csv_data_path, credentials=credentials)
