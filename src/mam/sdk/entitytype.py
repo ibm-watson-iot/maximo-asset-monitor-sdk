@@ -230,6 +230,7 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
         db_schema = kwargs['db_schema']
     #get the entity type to add data to
     entity_type_metadata = db.entity_type_metadata.get(entity_type_name)
+    print(entity_type_metadata)
     if entity_type_metadata is None:
         raise Exception(f'No entity type {entity_type_name} found.'
                         f'Make sure you create entity type before loading data using csv.'
@@ -239,6 +240,8 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
     timestamp_col_name = entity_type_metadata['metricTimestampColumn']
     logical_name = entity_type_metadata['name']
     table_name = entity_type_metadata['metricTableName']
+    if db.db_type == 'db2':
+        table_name = table_name.upper()
     deviceid_col = 'deviceid'
 
     required_cols = db.get_column_names(table=table_name, schema=db_schema)
