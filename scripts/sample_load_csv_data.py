@@ -19,4 +19,4 @@ print('Reading Analytics Credentials')
 with open(credentials_path, 'r') as F:
     credentials = json.load(F)
 
-entitytype.load_metrics_data_from_csv('shraddha_boiler', csv_data_path, credentials=credentials)
+entitytype.load_metrics_data_from_csv('shradddha-boiler-test', csv_data_path, credentials=credentials)
