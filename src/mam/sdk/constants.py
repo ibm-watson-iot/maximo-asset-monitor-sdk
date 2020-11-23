@@ -19,8 +19,8 @@ from .utils import *
 from .parseinput import *
 from .apiclient import (APIClient)
 
-from iotfunctions.enginelog import EngineLogging
-EngineLogging.configure_console_logging(logging.DEBUG)
+from iotfunctions.util import setup_logging
+setup_logging(log_level=logging.DEBUG, root_log_level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # /constants/v1/{tenantName} POST GET PUT DELETE

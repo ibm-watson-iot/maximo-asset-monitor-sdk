@@ -18,13 +18,12 @@ from iotfunctions.metadata import (BaseCustomEntityType)
 from iotfunctions.db import (Database)
 
 # mam-sdk modules
-from .utils import *
-from .parseinput import *
+from .utils import (validateJSON, generate_api_environment, api_to_pandas_type)
+from .parseinput import (parse_input_columns, parse_input_constants, parse_input_functions)
 from .apiclient import (APIClient)
 
-from iotfunctions.enginelog import EngineLogging
-
-EngineLogging.configure_console_logging(logging.DEBUG)
+from iotfunctions.util import setup_logging
+setup_logging(log_level=logging.DEBUG, root_log_level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # schema expected for creating entity type
@@ -181,7 +180,7 @@ def create_custom_entitytype(json_payload, credentials=None, **kwargs):
     # 4. CREATE CUSTOM ENTITY FROM JSON
     # 4.a Instantiate a custom entity type
     # overrides the _timestamp='evt_timestamp'
-    if 'metric_timestamp_column_name':
+    if 'metric_timestamp_column_name' in payload.keys():
         BaseCustomEntityType._timestamp = payload['metric_timestamp_column_name']
     # TODO: BaseCustomEntityType.timestamp= add user defined timestamp column
     entity_type = BaseCustomEntityType(name=payload['entity_type_name'],
@@ -275,17 +274,30 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
 
     # DATA CHECKS
     # 1. Check pd.DataFrame data types against entitytype/database data types
+    # coerce data frame object data type to corresponding database-data_type
+    # Add None for missing columns (Not added to the db)
+    logger.debug(f'Dataframe columns before data check 1. {df.columns}')
+    entity_type_columns = entity_type_metadata['dataItemDto']
+    for column in entity_type_columns:
+        if column['name'] in df.columns:
+            logger.debug(f"Column {column['name']}'s database type is {column['columnType']} and dataframe's type is"
+                         f" {df[column['name']].dtype}")
+            df[column['name']] = df[column['name']].astype(api_to_pandas_type(column['columnType']))
+            logger.debug(f"Changed dataframe type to {df[column['name']].dtype}")
+    logger.debug(f'Dataframe columns after data check 1. {df.columns}')
 
     # 2. allowed device_id name: alpha-numeric + hypen + underscore + period + between [1,36] length
     # Drop rows with un-allowed device_id names
-    logger.debug(f'Dataframe has {len(df.index)} rows of data')
+    logger.debug(f'Dataframe has {len(df.index)} rows of data before data check 2')
     df = df[df[deviceid_col].str.contains(r'^[A-Za-z0-9._-]+$')]
     df = df[df[deviceid_col].str.len() <= 36]
-    logger.warning(f'This function will ignore rows where deviceid column is not allowed')
+    logger.warning(f'This function will ignore rows where deviceid has values that are not allowed')
     logger.warning(f'(NOTE) Allowed characters in deviceid string are: alpha-numeric/hypen/underscore/period with '
                    f'length of 1 to 36 characters')
+    logger.debug(f'Dataframe has {len(df.index)} rows of data after data check 2')
 
     # remove columns that are not required/ in entity type definition
+    logger.debug(f'Updating columns: {required_cols}')
     df = df[required_cols]
     logger.debug(f'Top 5 elements of the df written to the db: \n{df.head(5)}')
     # write the dataframe to the database table
