@@ -9,7 +9,7 @@
 # python libraries
 import json
 import re
-import importlib
+import numpy as np
 import logging
 from string import punctuation, whitespace
 from sqlalchemy import Integer, String, Float, DateTime, Boolean, SmallInteger
@@ -187,3 +187,20 @@ def api_type(type):
     else:
         raise NotImplementedError(
             "You may add custom `datatype` to `" + str(type) + "` assignment in `_type_user_to_api_dict`.")
+
+
+# converting api types to python built-in type
+_type_api_to_pandas_dict = {
+    'NUMBER': float,
+    'LITERAL': str,
+    'TIMESTAMP': np.datetime64,
+    'BOOLEAN': bool,
+}
+
+
+def api_to_pandas_type(type):
+    """Return the closest python type for a given api type"""
+    if type in _type_api_to_pandas_dict:
+        return _type_api_to_pandas_dict[type.upper()]
+    else:
+        return str
