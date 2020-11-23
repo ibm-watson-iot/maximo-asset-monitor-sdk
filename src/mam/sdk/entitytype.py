@@ -23,6 +23,7 @@ from .parseinput import *
 from .apiclient import (APIClient)
 
 from iotfunctions.enginelog import EngineLogging
+
 EngineLogging.configure_console_logging(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -230,11 +231,11 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
         db_schema = kwargs['db_schema']
     #get the entity type to add data to
     entity_type_metadata = db.entity_type_metadata.get(entity_type_name)
-    print(entity_type_metadata)
+    logger.debug(entity_type_metadata)
     if entity_type_metadata is None:
-        raise Exception(f'No entity type {entity_type_name} found.'
-                        f'Make sure you create entity type before loading data using csv.'
-                        f'Refer to create_custom_entitytype() to create the entity type first')
+        raise RuntimeError(f'No entity type {entity_type_name} found.'
+                           f'Make sure you create entity type before loading data using csv.'
+                           f'Refer to create_custom_entitytype() to create the entity type first')
 
     # find required columns
     timestamp_col_name = entity_type_metadata['metricTimestampColumn']
@@ -268,20 +269,31 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
             logger.debug(f'Adding data: current time to missing column {m}')
             df[m] = dt.datetime.utcnow() - dt.timedelta(seconds=15)
         elif m == deviceid_col:
-            raise Exception(f'Missing required column {m}')
+            raise RuntimeError(f'Missing required column {m}')
         else:
             df[m] = None
 
-    # remove columns that are not required
+    # DATA CHECKS
+    # 1. Check pd.DataFrame data types against entitytype/database data types
+
+    # 2. allowed device_id name: alpha-numeric + hypen + underscore + period + between [1,36] length
+    # Drop rows with un-allowed device_id names
+    logger.debug(f'Dataframe has {len(df.index)} rows of data')
+    df = df[df[deviceid_col].str.contains(r'^[A-Za-z0-9._-]+$')]
+    df = df[df[deviceid_col].str.len() <= 36]
+    logger.warning(f'This function will ignore rows where deviceid column is not allowed')
+    logger.warning(f'(NOTE) Allowed characters in deviceid string are: alpha-numeric/hypen/underscore/period with '
+                   f'length of 1 to 36 characters')
+
+    # remove columns that are not required/ in entity type definition
     df = df[required_cols]
+    logger.debug(f'Top 5 elements of the df written to the db: \n{df.head(5)}')
     # write the dataframe to the database table
     db.write_frame(df=df, table_name=table_name)
     logger.debug(f'Generated {len(df.index)} rows of data and inserted into {table_name}')
 
     # CLOSE DB CONNECTION
     db.release_resource()
-
-    return
 
 
 def remove_entitytype(entity_type_name, credentials=None):
