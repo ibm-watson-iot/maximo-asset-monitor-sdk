@@ -18,7 +18,8 @@ from iotfunctions.metadata import (BaseCustomEntityType)
 from iotfunctions.db import (Database)
 
 # mam-sdk modules
-from .utils import (validateJSON, generate_api_environment, api_to_pandas_type)
+from .utils import (validateJSON, generate_api_environment, api_to_pandas_type, db_table_name, 
+                    change_df_dtype_to_db_dtype)
 from .parseinput import (parse_input_columns, parse_input_constants, parse_input_functions)
 from .apiclient import (APIClient)
 
@@ -239,18 +240,16 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
     # find required columns
     timestamp_col_name = entity_type_metadata['metricTimestampColumn']
     logical_name = entity_type_metadata['name']
-    table_name = entity_type_metadata['metricTableName']
-    if db.db_type == 'db2':
-        table_name = table_name.upper()
+    table_name = db_table_name(entity_type_metadata['metricTableName'], db.db_type )
     deviceid_col = 'deviceid'
 
     required_cols = db.get_column_names(table=table_name, schema=db_schema)
     missing_cols = list(set(required_cols) - set(df.columns))
     logger.debug(f'missing_cols : {missing_cols}')
     # Add data for missing columns that are required
-    # required columns that can't be NULL {'evt_timestamp',', 'updated_utc', 'devicetype'}
+    #required columns that can't be NULL {'evt_timestamp','device_id','updated_utc','devicetype','rcv_timestamp_utc'}
     for m in missing_cols:
-        if m == timestamp_col_name:
+        if m == timestamp_col_name or m == 'rcv_timestamp_utc':
             #get possible timestamp columns and select the first one from all candidate
             df_timestamp = df.filter(like='_timestamp')
             if not df_timestamp.empty:
@@ -278,12 +277,7 @@ def load_metrics_data_from_csv(entity_type_name, file_path, credentials=None, **
     # Add None for missing columns (Not added to the db)
     logger.debug(f'Dataframe columns before data check 1. {df.columns}')
     entity_type_columns = entity_type_metadata['dataItemDto']
-    for column in entity_type_columns:
-        if column['name'] in df.columns:
-            logger.debug(f"Column {column['name']}'s database type is {column['columnType']} and dataframe's type is"
-                         f" {df[column['name']].dtype}")
-            df[column['name']] = df[column['name']].astype(api_to_pandas_type(column['columnType']))
-            logger.debug(f"Changed dataframe type to {df[column['name']].dtype}")
+    df = change_df_dtype_to_db_dtype(df, entity_type_columns)
     logger.debug(f'Dataframe columns after data check 1. {df.columns}')
 
     # 2. allowed device_id name: alpha-numeric + hypen + underscore + period + between [1,36] length

@@ -204,3 +204,30 @@ def api_to_pandas_type(type):
         return _type_api_to_pandas_dict[type.upper()]
     else:
         return str
+
+
+def db_table_name(table_name, db_type):
+    """
+    :param table_name: str lower case table name
+    :param db_type:  str "db2" or "postgres"
+    :return:  upper case table name for db2 and lower case for postgres
+    """
+    if db_type == 'db2':
+        return table_name.upper()
+    return table_name
+
+
+def change_df_dtype_to_db_dtype(df, entity_type_columns):
+    """
+
+    :param df: pandas.Dataframe df we want to write to db
+    :param entity_type_columns: db column information
+    :return: pandas.Dataframe with coerced columns
+    """
+    for column in entity_type_columns:
+        if column['name'] in df.columns:
+            logger.debug(f"Column {column['name']}'s database type is {column['columnType']} and dataframe's type is"
+                         f" {df[column['name']].dtype}")
+            df[column['name']] = df[column['name']].astype(api_to_pandas_type(column['columnType']))
+            logger.debug(f"Changed dataframe type to {df[column['name']].dtype}")
+    return df
