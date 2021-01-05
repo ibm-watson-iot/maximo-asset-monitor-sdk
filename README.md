@@ -17,6 +17,8 @@ lastupdated: "2019-06-18"
 # Maximo Asset Monitor Python SDK
 {: #python .reference}
 
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+
 Use the Python SDK to get started quickly with using the REST APIs of Maximo Asset Monitor. 
 {:shortdesc}
 
