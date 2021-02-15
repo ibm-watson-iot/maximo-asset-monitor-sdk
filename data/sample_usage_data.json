@@ -1,5 +1,5 @@
 {
-    "entity_type_name": "shraddha_custom_entity",
+    "entity_type_name": "SHRADDHA_TEST",
     "metrics": [
         {
             "name":"metric_1",

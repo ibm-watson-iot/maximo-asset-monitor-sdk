@@ -14,11 +14,11 @@ import json
 
 #DEFINE PATH TO REQUIRED FILES
 #relative to where you run script from
-credentials_path = './dev_resources/credentials.json'
-entitytype_data_path = './data/sample_usage_data.json'
-constants_data_path = './data/sample_constant_data.json'
-function_data_path = './data/sample_function_data.json'
-dimension_data_path = './data/sample_dimension_data.json'
+credentials_path = '../dev_resources/credentials.json'
+entitytype_data_path = '../data/sample_usage_data.json'
+constants_data_path = '../data/sample_constant_data.json'
+function_data_path = '../data/sample_function_data.json'
+dimension_data_path = '../data/sample_dimension_data.json'
 
 #LOADING DATABASE CREDENTIALS
 '''
@@ -51,7 +51,7 @@ with open(entitytype_data_path, 'r') as f:
 Usage:
 1. (X) Add Function - using a json payload
 ------------------------------------------------------------------------------------------"""
-tests_completed ['add_functions'] = False
+tests_completed['add_functions'] = False
 # 1. Sample Usage Module: Create Entity Type
 with open(function_data_path, 'r') as f:
     try:

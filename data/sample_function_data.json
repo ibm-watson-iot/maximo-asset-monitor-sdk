@@ -1,5 +1,5 @@
 {
-    "entity_type_name": "shraddha_test_1151_1",
+    "entity_type_name": "shraddha_custom_entity",
     "functions": [
         {
           "name": "EntityDataGenerator",

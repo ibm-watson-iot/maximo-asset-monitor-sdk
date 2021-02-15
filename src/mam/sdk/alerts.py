@@ -20,7 +20,7 @@ from .parseinput import *
 from .apiclient import (APIClient)
 
 from iotfunctions.util import setup_logging
-setup_logging(log_level=logging.DEBUG, root_log_level=logging.DEBUG)
+setup_logging(as_log_level=logging.DEBUG, root_log_level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 query_alerts_schema = {
