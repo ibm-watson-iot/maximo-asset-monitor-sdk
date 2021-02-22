@@ -53,7 +53,7 @@ setup(
     # long_description=read_md('README.md'),
     install_requires=[
         "jsonschema >= 3.2.0",
-        "iotfunctions @ git+https://github.com/ibm-watson-iot/functions.git@production#egg=iotfunctions"
+        "iotfunctions @ git+https://github.com/ibm-watson-iot/functions.git@production#egg=iotfunctions >= 8.3.0"
     ],
     classifiers=[
         'Programming Language :: Python :: 3.7',
