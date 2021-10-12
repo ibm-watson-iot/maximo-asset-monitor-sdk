@@ -14,7 +14,7 @@ lastupdated: "2019-06-18"
 {:child: .link .ulchildlink}
 {:childlinks: .ullinks}
 
-# Maximo Asset Monitor Python SDK
+# Maximo Asset Monitor notebook templates
 {: #python .reference}
 
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
